@@ -1,0 +1,57 @@
+
+image: node:14-alpine
+
+stages:
+
+  - build
+  - test
+  - package
+  - deploy 
+
+build:
+  
+  stage: build
+  tags:
+    - build
+
+  before_script:
+
+    - npm install
+
+  script:
+    - npm run build
+
+  cache:
+    key: npm
+    paths:
+      - node_modules/
+test:
+  stage: test
+  tags:
+    - test
+
+  script:
+    - npm test
+
+  cache:
+    key: npm
+    paths:
+      - node_modules/
+
+package:  
+  stage: package
+  image: docker
+  services:
+    - docker:dind
+
+  tags:
+    - package
+
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
+  script:
+    - docker build -t yallic/protein-bitirme .
+    - docker push yallic/protein-bitirme
+
+
+
