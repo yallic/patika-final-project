@@ -4,7 +4,7 @@ FROM node:14-alpine
 
 # apk add --no-cache libc6-compat
 
-EXPOSE 3000
+EXPOSE 80
 
 
 WORKDIR /usr/src/app
