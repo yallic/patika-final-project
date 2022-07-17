@@ -78,7 +78,7 @@ deploy:
     name: alpine/helm:3.5.3
     entrypoint: [""]
   variables:
-    CHART: protein-prject
+    CHART: protein-project
 
   before_script:
     - apk add git
@@ -99,6 +99,7 @@ deploy:
     - echo ${CI_REGISTRY_PASSWORD}
     - helm repo add --username ${CI_REGISTRY_USER} --password ${AUTH_TOKEN} incubator https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/helm/incubator
     - helm cm-push ${CHART}*.tgz incubator
+    - helm repo update
     - helm install protein-project incubator/${CHART}
 
     
