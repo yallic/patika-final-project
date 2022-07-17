@@ -19,7 +19,6 @@ Bu komut ile o dizinde terraform initialize edilmiş olur ve gerekli indirmeler 
 
 Bu komut ile Terraform ile yazılmış konfigürasyon gözden geçirilir
 
-/ belki çıktı koyulur buraya 
 
 ### `terraform apply`
 
@@ -50,21 +49,29 @@ AWS ELB
 
 CI/CD pipeline shared runner olarak değil local bilgisayarda bulunan Gitlab Runner da çalışmaktadır. Gitlab Runner configure etmek için girilen komut :
 
-[komutu yapıştır]
+<p align="center">
+<img src="./docs/img/runner-register-command.png">
+</p>
 
 
-[Config toml içeriğini göster]
+<p align="center">
+<img src="./docs/img/config.toml.png">
+</p>
 
 ## Kubernetes
 
-Projeyi Kubernetes'e deploy etmek için build edilen Docker imajı ile Deployment objesi oluşturulmuştur. deployment.yaml dosyası Kubernetes dizini içerisinde yer almaktadır. Kubectl ile localde deployment objesinin oluşturulması ve listelenmesi aşağıdaki görselde yer almaktadır:
+Projeyi Kubernetes'e deploy etmek için Gitlab da agent oluşturulmuş ve K8S clusterına bu agent Helm ile yüklenmiştir
 
 <p align="center">
-<img src="./docs/img/kubectl-deployment.png">
+<img src="./docs/img/k8s-agent.png">
 </p>
 
-Oluşturulan deployment objesinin dışarıdan erişilebilmesi için Nodeport tipinde service oluşturulmuştur. 
+
+Build edilen Docker imajı ile Deployment objesi oluşturulmuştur. deployment.yaml dosyası Kubernetes dizini içerisinde yer almaktadır. CI/CD pipelinında oluşturulan deployment objesi ve service objesi aşağıda gösterilmiştir. Oluşturulan deployment objesinin dışarıdan erişilebilmesi için Nodeport tipinde service oluşturulmuştur. 
 
 <p align="center">
-<img src="./docs/img/kubectl-service.png">
+<img src="./docs/img/k8s-deployment.png">
 </p>
+
+
+
