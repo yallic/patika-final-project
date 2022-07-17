@@ -7,7 +7,9 @@ Bu proje Patika- Protein Devops bootcamp bitirme projesidir. Projede basit bir r
 AWS platformunda Elastic Container Service(ECS) oluşturulmuştur. ECS servisi ve ECS servisi için gerekli VPC, Security Group ve Load balancer 
 Terraform ile oluşturulmuştur. Terraform dosyaları ./terraform klasörü içerisinde yer almaktadır. Terraform ile oluşturulan AWS ECS Fargate servisi ve diğer servislerin mimarisi aşağıdaki görselde gösterilmiştir.
 
-[mimari foto]
+<p align="center">
+<img src="./docs/img/architecture.png">
+</p>
 
 Terraform ile görseldeki mimari servislerinin kurulması için Terraform dosyalarının bulunduğu dizinde aşağıdaki işlemler sırası ile yapılmalıdır:
 
