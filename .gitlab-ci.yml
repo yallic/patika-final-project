@@ -89,8 +89,8 @@ k8s-deploy:
     - kubectl config get-contexts
     - kubectl config use-context yallic/protein-bitirme-projesi:k8s-agent
     - kubectl set image -f deployment.yaml protein-bitirme=yallic/protein-bitirme:${IMAGE_TAG} --local -o yaml
-    - kubectl apply -f ./kubernetes/deployment.yaml
+    - kubectl apply -f  kubernetes/deployment.yaml
     - kubectl get deployments
-    - kubectl apply -f ./kubernetes/service.yaml
+    - kubectl apply -f kubernetes/service.yaml
     - kubectl get services
 
