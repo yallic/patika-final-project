@@ -1,70 +1,70 @@
-# Getting Started with Create React App
+# Protein Final Project
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Bu proje Patika- Protein Devops bootcamp bitirme projesidir. Projede basit bir react uygulaması yer almaktadır. Bu React uygulaması CI/CD pipeline'ına build ve test edilir. Daha sonra oluşturulan Dockerfile ile pipeline içerisinde dockerize edilir. Oluşturulan Docker imajı  AWS ECS servisine Pipeline ile deploy edilir. AWS ECS servisi Terraform ile declarative olarak oluşturulmuştur. Uygulama aynı zamanda K8S ortamına da deploy edilmektedir.
 
-## Available Scripts
+## Terraform & AWS 
 
-In the project directory, you can run:
+AWS platformunda Elastic Container Service(ECS) oluşturulmuştur. ECS servisi ve ECS servisi için gerekli VPC, Security Group ve Load balancer 
+Terraform ile oluşturulmuştur. Terraform dosyaları ./terraform klasörü içerisinde yer almaktadır. Terraform ile oluşturulan AWS ECS Fargate servisi ve diğer servislerin mimarisi aşağıdaki görselde gösterilmiştir.
 
-### `npm start`
+[mimari foto]
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Terraform ile görseldeki mimari servislerinin kurulması için Terraform dosyalarının bulunduğu dizinde aşağıdaki işlemler sırası ile yapılmalıdır:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### `terraform init`
 
-### `npm test`
+Bu komut ile o dizinde terraform initialize edilmiş olur ve gerekli indirmeler yapılır. 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### `terraform plan`
 
-### `npm run build`
+Bu komut ile Terraform ile yazılmış konfigürasyon gözden geçirilir
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+/ belki çıktı koyulur buraya 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### `terraform apply`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Bu komut ile yazılan konfigürasyon aws üzerinde gerçekleştirilir. Komut uygulandığında AWS VPC, AWS ECS, AWS ELB servisleri oluşturulur. Aşağıdaki ekran görüntülerinde Terraform ile oluşturulan servisler yer almaktadır.
 
-### `npm run eject`
+AWS ECS Cluster
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+<p align="center">
+<img src="./docs/img/cluster-last.png">
+</p>
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+AWS VPC & Security Group
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+<p align="center">
+<img src="./docs/img/vpc.png">
+</p>
 
-## Learn More
+AWS ELB
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+<p align="center">
+<img src="./docs/img/load-balancer.png">
+</p>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Gitlab Runner & CI/CD Pipeline
 
-### Analyzing the Bundle Size
+CI/CD pipeline shared runner olarak değil local bilgisayarda bulunan Gitlab Runner da çalışmaktadır. Gitlab Runner configure etmek için girilen komut :
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+[komutu yapıştır]
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+[Config toml içeriğini göster]
 
-### Advanced Configuration
+## Kubernetes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Projeyi Kubernetes'e deploy etmek için build edilen Docker imajı ile Deployment objesi oluşturulmuştur. deployment.yaml dosyası Kubernetes dizini içerisinde yer almaktadır. Kubectl ile localde deployment objesinin oluşturulması ve listelenmesi aşağıdaki görselde yer almaktadır:
 
-### Deployment
+<p align="center">
+<img src="./docs/img/kubectl-deployment.png">
+</p>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Oluşturulan deployment objesinin dışarıdan erişilebilmesi için Nodeport tipinde service oluşturulmuştur. 
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<p align="center">
+<img src="./docs/img/kubectl-service.png">
+</p>
