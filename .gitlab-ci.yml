@@ -107,8 +107,13 @@ deploy:
   image:
     name: bitnami/kubectl:latest
     entrypoint: ['']
+  before_script:
+    - IMAGE_TAG="$(echo $CI_COMMIT_SHA | head -c 8)"
   script:
     - kubectl config get-contexts
     - kubectl config use-context yallic/protein-bitirme-projesi:k8s-agent
+    - kubectl set image -f deployment.yaml protein-bitirme=yallic/protein-bitirme:${IMAGE_TAG} --local -o yaml
+    - kubectl apply -f deployment.yaml
+    - kubectl apply -f service.yaml
     - kubectl get pods
 
