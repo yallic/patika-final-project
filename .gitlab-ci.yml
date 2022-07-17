@@ -9,70 +9,70 @@ stages:
   - package
   - deploy 
 
-# build:
+build:
   
-#   stage: build
-#   tags:
-#     - build
+  stage: build
+  tags:
+    - build
 
-#   before_script:
+  before_script:
 
-#     - npm install
+    - npm install
 
-#   script:
-#     - npm run build
+  script:
+    - npm run build
 
-#   cache:
-#     key: npm
-#     paths:
-#       - node_modules/
-# test:
-#   stage: test
-#   tags:
-#     - test
+  cache:
+    key: npm
+    paths:
+      - node_modules/
+test:
+  stage: test
+  tags:
+    - test
 
-#   script:
-#     - npm test
+  script:
+    - npm test
 
-#   cache:
-#     key: npm
-#     paths:
-#       - node_modules/
+  cache:
+    key: npm
+    paths:
+      - node_modules/
 
-# package:  
-#   stage: package
-#   image: docker
-#   services:
-#     - docker:dind
+package:  
+  stage: package
+  image: docker
+  services:
+    - docker:dind
 
-#   tags:
-#     - package
+  tags:
+    - package
 
-#   before_script:
-#     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
-#     - IMAGE_TAG="$(echo $CI_COMMIT_SHA | head -c 8)"
-#   script:
-#     - docker build -t yallic/protein-bitirme:latest .
-#     - echo ${IMAGE_TAG}
-#     - docker tag yallic/protein-bitirme:latest yallic/protein-bitirme:${IMAGE_TAG}
-#     - docker push yallic/protein-bitirme:${IMAGE_TAG}
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
+    - IMAGE_TAG="$(echo $CI_COMMIT_SHA | head -c 8)"
+  script:
+    - docker build -t yallic/protein-bitirme:latest .
+    - echo ${IMAGE_TAG}
+    - docker tag yallic/protein-bitirme:latest yallic/protein-bitirme:${IMAGE_TAG}
+    - docker push yallic/protein-bitirme:${IMAGE_TAG}
 
-# aws-deploy:
-#   stage: deploy
-#   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-#   before_script:
-#     - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-#     - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-#     - aws configure set region $AWS_DEFAULT_REGION
-#     - IMAGE_TAG="$(echo $CI_COMMIT_SHA | head -c 8)"
-#   script:
-#     - echo yallic/protein-bitirme:${IMAGE_TAG}
-#     - TASK_DEFINITION=$(aws ecs describe-task-definition --task-definition "${TASK_DEFINITION_NAME}" --region "${AWS_DEFAULT_REGION}")
-#     - NEW_CONTAINER_DEFINITION=$(echo $TASK_DEFINITION | jq --arg IMAGE "yallic/protein-bitirme:${IMAGE_TAG}" '.taskDefinition.containerDefinitions[0].image = $IMAGE | .taskDefinition.containerDefinitions[0]')
+aws-deploy:
+  stage: deploy
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  before_script:
+    - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+    - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+    - aws configure set region $AWS_DEFAULT_REGION
+    - IMAGE_TAG="$(echo $CI_COMMIT_SHA | head -c 8)"
+  script:
+    - echo yallic/protein-bitirme:${IMAGE_TAG}
+    - TASK_DEFINITION=$(aws ecs describe-task-definition --task-definition "${TASK_DEFINITION_NAME}" --region "${AWS_DEFAULT_REGION}")
+    - NEW_CONTAINER_DEFINITION=$(echo $TASK_DEFINITION | jq --arg IMAGE "yallic/protein-bitirme:${IMAGE_TAG}" '.taskDefinition.containerDefinitions[0].image = $IMAGE | .taskDefinition.containerDefinitions[0]')
 
-#     - aws ecs register-task-definition --region "${AWS_DEFAULT_REGION}" --family "${TASK_DEFINITION_NAME}" --requires-compatibilities FARGATE --network-mode awsvpc --cpu 1024 --memory 2048 --container-definitions "${NEW_CONTAINER_DEFINITION}"
+    - aws ecs register-task-definition --region "${AWS_DEFAULT_REGION}" --family "${TASK_DEFINITION_NAME}" --requires-compatibilities FARGATE --network-mode awsvpc --cpu 1024 --memory 2048 --container-definitions "${NEW_CONTAINER_DEFINITION}"
 
-#     - aws ecs update-service  --region "${AWS_DEFAULT_REGION}" --cluster "${CLUSTER_NAME}" --service "${SERVICE_NAME}"  --task-definition "${TASK_DEFINITION_NAME}"
+    - aws ecs update-service  --region "${AWS_DEFAULT_REGION}" --cluster "${CLUSTER_NAME}" --service "${SERVICE_NAME}"  --task-definition "${TASK_DEFINITION_NAME}"
  
 
 
