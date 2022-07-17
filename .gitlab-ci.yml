@@ -58,6 +58,7 @@ package:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
   script:
     - docker build -t yallic/protein-bitirme:latest .
+    - echo $IMAGE_TAG
     - docker tag yallic/protein-bitirme:latest yallic/protein-bitirme:$IMAGE_TAG
     - docker push yallic/protein-bitirme:$IMAGE_TAG
 
