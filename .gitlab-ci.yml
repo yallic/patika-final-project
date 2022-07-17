@@ -57,51 +57,58 @@ stages:
 #     - docker tag yallic/protein-bitirme:latest yallic/protein-bitirme:${IMAGE_TAG}
 #     - docker push yallic/protein-bitirme:${IMAGE_TAG}
 
-deploy:
-  stage: deploy
-#   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-#   before_script:
-#     - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-#     - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-#     - aws configure set region $AWS_DEFAULT_REGION
-#     - IMAGE_TAG="$(echo $CI_COMMIT_SHA | head -c 8)"
-#   script:
-#     - echo yallic/protein-bitirme:${IMAGE_TAG}
-#     - TASK_DEFINITION=$(aws ecs describe-task-definition --task-definition "${TASK_DEFINITION_NAME}" --region "${AWS_DEFAULT_REGION}")
-#     - NEW_CONTAINER_DEFINITION=$(echo $TASK_DEFINITION | jq --arg IMAGE "yallic/protein-bitirme:${IMAGE_TAG}" '.taskDefinition.containerDefinitions[0].image = $IMAGE | .taskDefinition.containerDefinitions[0]')
+# deploy:
+#   stage: deploy
+# #   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+# #   before_script:
+# #     - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+# #     - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+# #     - aws configure set region $AWS_DEFAULT_REGION
+# #     - IMAGE_TAG="$(echo $CI_COMMIT_SHA | head -c 8)"
+# #   script:
+# #     - echo yallic/protein-bitirme:${IMAGE_TAG}
+# #     - TASK_DEFINITION=$(aws ecs describe-task-definition --task-definition "${TASK_DEFINITION_NAME}" --region "${AWS_DEFAULT_REGION}")
+# #     - NEW_CONTAINER_DEFINITION=$(echo $TASK_DEFINITION | jq --arg IMAGE "yallic/protein-bitirme:${IMAGE_TAG}" '.taskDefinition.containerDefinitions[0].image = $IMAGE | .taskDefinition.containerDefinitions[0]')
 
-#     - aws ecs register-task-definition --region "${AWS_DEFAULT_REGION}" --family "${TASK_DEFINITION_NAME}" --requires-compatibilities FARGATE --network-mode awsvpc --cpu 1024 --memory 2048 --container-definitions "${NEW_CONTAINER_DEFINITION}"
+# #     - aws ecs register-task-definition --region "${AWS_DEFAULT_REGION}" --family "${TASK_DEFINITION_NAME}" --requires-compatibilities FARGATE --network-mode awsvpc --cpu 1024 --memory 2048 --container-definitions "${NEW_CONTAINER_DEFINITION}"
 
-#     - aws ecs update-service  --region "${AWS_DEFAULT_REGION}" --cluster "${CLUSTER_NAME}" --service "${SERVICE_NAME}"  --task-definition "${TASK_DEFINITION_NAME}"
+# #     - aws ecs update-service  --region "${AWS_DEFAULT_REGION}" --cluster "${CLUSTER_NAME}" --service "${SERVICE_NAME}"  --task-definition "${TASK_DEFINITION_NAME}"
  
-  image:
-    name: alpine/helm:3.5.3
-    entrypoint: [""]
-  variables:
-    CHART: protein-project
+#   image:
+#     name: alpine/helm:3.5.3
+#     entrypoint: [""]
+#   variables:
+#     CHART: protein-project
 
-  before_script:
-    - apk add git
-    - helm plugin install https://github.com/chartmuseum/helm-push
-    # - >
-    #   helm repo add ${CHART}
-    #   --username ${CI_REGISTRY_USER}
-    #   --password ${CI_REGISTRY_PASSWORD}
-    #   ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/stable
-    - helm create ${CHART}
-    - rm -rf ${CHART}/templates/test
-    - rm ${CHART}/templates/*.yaml
-    - cp deployment.yaml ${CHART}/templates/
-    - cp service.yaml ${CHART}/templates/
-  script:
-    - helm package ${CHART}
-    - ls
-    - echo ${CI_REGISTRY_PASSWORD}
-    - helm repo add --username ${CI_REGISTRY_USER} --password ${AUTH_TOKEN} incubator https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/helm/incubator
-    - helm cm-push ${CHART}*.tgz incubator
-    - helm repo update
-    - helm install protein-project incubator/${CHART}
+#   before_script:
+#     - apk add git
+#     - helm plugin install https://github.com/chartmuseum/helm-push
+#     # - >
+#     #   helm repo add ${CHART}
+#     #   --username ${CI_REGISTRY_USER}
+#     #   --password ${CI_REGISTRY_PASSWORD}
+#     #   ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/stable
+#     - helm create ${CHART}
+#     - rm -rf ${CHART}/templates/test
+#     - rm ${CHART}/templates/*.yaml
+#     - cp deployment.yaml ${CHART}/templates/
+#     - cp service.yaml ${CHART}/templates/
+#   script:
+#     - helm package ${CHART}
+#     - ls
+#     - echo ${CI_REGISTRY_PASSWORD}
+#     - helm repo add --username ${CI_REGISTRY_USER} --password ${AUTH_TOKEN} incubator https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/helm/incubator
+#     - helm cm-push ${CHART}*.tgz incubator
+#     - helm repo update
+#     - helm install protein-project incubator/${CHART}
 
     
-
+deploy:
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: ['']
+  script:
+    - kubectl config get-contexts
+    # - kubectl config use-context path/to/agent/repository:agent-name
+    # - kubectl get pods
 
