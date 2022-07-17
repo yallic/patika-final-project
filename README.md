@@ -47,7 +47,7 @@ AWS ELB
 
 ## Gitlab Runner & CI/CD Pipeline
 
-CI/CD pipeline shared runner olarak değil local bilgisayarda bulunan Gitlab Runner da çalışmaktadır. Gitlab Runner configure etmek için girilen komut :
+CI/CD pipeline shared runner olarak değil local bilgisayarda bulunan Gitlab Runner da çalışmaktadır. Gitlab Runner Docker ile local bilgisayara kurulmuştur. Gitlab Runner configure etmek için girilen komut :
 
 <p align="center">
 <img src="./docs/img/runner-register-command.png">
@@ -58,6 +58,12 @@ CI/CD pipeline shared runner olarak değil local bilgisayarda bulunan Gitlab Run
 <img src="./docs/img/config.toml.png">
 </p>
 
+CI/CD pipelineında proje build ve test aşamalarından geçmektedir. React projesi npm aracı ile build alınmakta  daha sonra test edilmektedir. Pipeline'da build ve test den sonra Docker imajının build edilmesi ve Dockerhub'a pushlanması adımı vardır. Bu adımda Docker imajı her pipeline da farklı tag almaktadır. Deploy edildiği ortamlarda bu taglerle deploy edilmektedir. Build edilen Docker imajı hem AWS ECS Fargate servisine hem de Kubernetes Clusterına deploy edilmektedir. Deploy edilen imajlar Terraform ve Kubernetes bölümlerinde gösterilmiştir. 
+
+<p align="center">
+<img src="./docs/img/gitlab-ci-pipeline.png">
+</p>
+
 ## Kubernetes
 
 Projeyi Kubernetes'e deploy etmek için Gitlab da agent oluşturulmuş ve K8S clusterına bu agent Helm ile yüklenmiştir
@@ -66,6 +72,9 @@ Projeyi Kubernetes'e deploy etmek için Gitlab da agent oluşturulmuş ve K8S cl
 <img src="./docs/img/k8s-agent.png">
 </p>
 
+<p align="center">
+<img src="./docs/img/gitlab-runner.png">
+</p>
 
 Build edilen Docker imajı ile Deployment objesi oluşturulmuştur. deployment.yaml dosyası Kubernetes dizini içerisinde yer almaktadır. CI/CD pipelinında oluşturulan deployment objesi ve service objesi aşağıda gösterilmiştir. Oluşturulan deployment objesinin dışarıdan erişilebilmesi için Nodeport tipinde service oluşturulmuştur. 
 
