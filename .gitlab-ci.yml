@@ -109,6 +109,6 @@ deploy:
     entrypoint: ['']
   script:
     - kubectl config get-contexts
-    # - kubectl config use-context path/to/agent/repository:agent-name
-    # - kubectl get pods
+    - kubectl config use-context yallic/protein-bitirme-projesi:k8s-agent
+    - kubectl get pods
 
