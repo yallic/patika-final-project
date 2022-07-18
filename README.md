@@ -10,7 +10,7 @@ Elastic Container Service (ECS) is built on the AWS platform. ECS service and VP
 <img src="./docs/img/architecture.png">
 </p>
 
- **NOTE: ** AWS architecture is drawn with excalidraw implementation instead of draw.io. Excalidraw file has been added to the repo with the name Aws-Architecture.excalidraw. It is the output of the above architecture in png format.
+ **NOTE:** AWS architecture is drawn with excalidraw implementation instead of draw.io. Excalidraw file has been added to the repo with the name Aws-Architecture.excalidraw. It is the output of the above architecture in png format.
 
 In order to install the architectural services in the image with Terraform, the following operations should be performed in the directory where the Terraform files are located:
 
