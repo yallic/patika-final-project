@@ -44,6 +44,11 @@ AWS ELB
 <img src="./docs/img/load-balancer.png">
 </p>
 
+AWS CloudWatch
+
+<p align="center">
+<img src="./docs/img/cloudwatch.png">
+</p>
 
 
 ## Gitlab Runner & CI/CD Pipeline
